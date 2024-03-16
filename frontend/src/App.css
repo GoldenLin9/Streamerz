@@ -1,0 +1,8 @@
+.App {
+  display: grid;
+  grid-template-columns: 1fr 4fr 1fr;
+}
+
+body {
+  margin: 0;
+}
