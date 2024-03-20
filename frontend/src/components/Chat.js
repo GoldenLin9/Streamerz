@@ -1,4 +1,5 @@
 import '../styles/chat.css'
+import '../styles/shared.css'
 
 export default function Chat({ id }) {
     return(

@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
-
 
 function getDimensions(multiplier, units) {
-    let widthRatio = 16
-    let heightRatio = 9
+    const widthRatio = 16
+    const heightRatio = 9
 
     let newWidth = widthRatio * multiplier;
     let newHeight = heightRatio * multiplier;
@@ -23,7 +21,7 @@ function Twitch({ url }) {
     let src = "https://player.twitch.tv/?channel=" + channelName + "&parent=" + parent;
     console.log(src)
 
-    let [newWidth, newHeight] = getDimensions(99, "px")
+    let [newWidth, newHeight] = getDimensions(65, "px")
 
     return <iframe title = "Twitch" src= {src} frameborder="0" allowfullscreen="true" scrolling="no" height= {newHeight} width= {newWidth}></iframe>
 
@@ -43,27 +41,10 @@ function Play({ platform, url }) {
 
 
 export default function MediaPlayer({ currChannel }) {
-    const [channel, setChannel] = useState(null);
-
-    useEffect(() => {
-        let getChannel = async () => {
-            let response = await fetch(`/api/channel-detail/${currChannel}`);
-            let data = await response.json();
-            setChannel(data);
-        }
-
-        getChannel();
-    }, [currChannel]);
-
-    if (!channel) {
-        return null;
-    } else {
-        console.log(channel.url.split("/"))
-    }
 
     return (
         <>
-            <Play platform = {channel.platform} url = {channel.url} />
+            <Play platform = {currChannel.platform} url = {currChannel.url} />
         </>
     );
 }

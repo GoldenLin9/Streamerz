@@ -10,4 +10,4 @@ class Channel(models.Model):
     platform = models.CharField(max_length = 100, blank = False)
 
     def __str__(self):
-        return self.url
+        return self.name

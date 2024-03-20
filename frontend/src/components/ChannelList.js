@@ -5,13 +5,13 @@ import ChannelAdd from './ChannelAdd.js'
 
 import '../styles/channelList.css'
 
-export default function ChannelList({ id, setcurrChannel }) {
+export default function ChannelList({ id, currChannel, setCurrChannel }) {
 
     let [channels, setChannels] = useState([])
 
     useEffect(() => {
         getChannels()
-    }, [])
+    }, [currChannel])
 
     let getChannels = async () => {
         let response = await fetch("/api/channel-list/")
@@ -26,7 +26,7 @@ export default function ChannelList({ id, setcurrChannel }) {
             <ChannelHeader />
 
             {channels.map((channel) => (
-                <Channel key = {channel.id} channel = {channel} setcurrChannel = {setcurrChannel} />
+                <Channel key = {channel.id} channel = {channel} setCurrChannel = {setCurrChannel} />
             ))}
 
             <ChannelAdd />

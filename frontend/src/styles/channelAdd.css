@@ -1,5 +1,4 @@
-#btn {
-    position: absolute;
-    bottom: 0;
-    color: white;
+#channelAdd {
+    background-color: lightgreen;
+    border: 1px solid black;
 }

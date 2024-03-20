@@ -7,7 +7,6 @@ from .serializers import ChannelSerializer
 from .models import Channel
 
 # Create your views here.
-
 @api_view(["GET"])
 def getRoutes(request):
 
@@ -15,6 +14,7 @@ def getRoutes(request):
         "Create": "/task-create/",
     }
     return Response(api_urls)
+
 
 @api_view(["GET"])
 def channelList(request):
@@ -43,7 +43,7 @@ def channelCreate(request):
 
     return Response(serializer.data)
 
-@api_view(["POST"])
+@api_view(["PUT"])
 def channelUpdate(request, pk):
     channel = Channel.objects.get(id = pk)
     serializer = ChannelSerializer(instance = channel, data = request.data)
@@ -60,3 +60,4 @@ def channelDelete(request, pk):
     channel.delete()
 
     return Response("Item successfully deleted")
+    
