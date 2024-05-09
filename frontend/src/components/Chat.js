@@ -4,7 +4,7 @@ import '../styles/shared.css'
 export default function Chat({ id }) {
     return(
         <div id = {id}>
-            <h1> Chat here </h1>
+            <h1 id = "ChatHeader"> Chat here </h1>
 
         </div>
     )

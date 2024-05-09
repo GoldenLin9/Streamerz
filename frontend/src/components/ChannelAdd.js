@@ -7,14 +7,14 @@ import React, { useState } from 'react'
 
 
 
-export default function ChannelHeader() {
+export default function ChannelHeader({ setCurrChannel }) {
     
     const [adding, setAdding] = useState(false);
 
     return (
         <>
             {adding ?
-                <ChannelForm channelName = "" link = "" platform = "" addingChannel= {true} channel = {null} setCurrChannel={null} setEditing = {null}/>
+                <ChannelForm channelName = "" link = "" platform = "" addingChannel= {true} channel = {null} setCurrChannel={ setCurrChannel } setEditing = {null} setAdding = {setAdding} />
             :
             <div id = "channelAdd" onClick = {()=> setAdding(true)}>
                 <FontAwesomeIcon icon= {faPlus} />

@@ -6,10 +6,10 @@ import Chat from './components/Chat.js'
 import React, { useState } from 'react' 
 
 function App() {
-  let [currChannel, setCurrChannel] = useState()
+  let [currChannel, setCurrChannel] = useState({})
 
   return (
-    
+
     <div className="App">
 
       <ChannelList id = "ChannelList" currChannel = {currChannel} setCurrChannel = {setCurrChannel}/>

@@ -14,22 +14,21 @@ export default function ChannelList({ id, currChannel, setCurrChannel }) {
     }, [currChannel])
 
     let getChannels = async () => {
-        let response = await fetch("/api/channel-list/")
+        let response = await fetch("/api/channel-list")
         let data = await response.json()
         setChannels(data)
         console.log(data)
     }
 
-
     return (
         <div id = {id}>
             <ChannelHeader />
 
-            {channels.map((channel) => (
-                <Channel key = {channel.id} channel = {channel} setCurrChannel = {setCurrChannel} />
+            {channels.map((channel, indx) => (
+                <Channel key = {channel.id} channel = {channel} setCurrChannel = {setCurrChannel} channelIndx = {channel.id} />
             ))}
 
-            <ChannelAdd />
+            <ChannelAdd setCurrChannel = {setCurrChannel} />
         </div>
     )
 }

@@ -23,7 +23,7 @@ function Twitch({ url }) {
 
     let [newWidth, newHeight] = getDimensions(65, "px")
 
-    return <iframe title = "Twitch" src= {src} frameborder="0" allowfullscreen="true" scrolling="no" height= {newHeight} width= {newWidth}></iframe>
+    return <iframe class = "MediaPlayer" title = "Twitch" src= {src} frameborder="0" allowfullscreen="true" scrolling="no" height= {newHeight} width= {newWidth}></iframe>
 
 }
 
@@ -31,17 +31,29 @@ function YT(url) {
     return <h1>bye</h1>
 }
 
+
+function Error() {
+    return <h1>Click Channel/ Error</h1>
+}
+
 function Play({ platform, url }) {
-    if (platform === "Twitch") {
-        return <Twitch url = {url} />
-    } else if (platform === "Youtube") {
-        return <YT url = {url} />
+
+    switch (platform) {
+        case "Twitch":
+            return <Twitch url = {url} />
+
+        case "Youtube":
+            return <YT url = {url} />
+
+        default:
+            return <Error />
     }
 }
 
 
 export default function MediaPlayer({ currChannel }) {
 
+    console.log(currChannel);
     return (
         <>
             <Play platform = {currChannel.platform} url = {currChannel.url} />

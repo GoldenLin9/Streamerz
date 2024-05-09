@@ -1,6 +1,8 @@
 
 .channel {
-    border: 1px solid black;
+    border: 5px solid black;
+    border-radius: 0 10px 10px 0;
+
     background-color: lightgray;
     cursor: pointer;
     
@@ -17,6 +19,13 @@
 .trashIcon {
     position: absolute;
     right: 1em;
-
     color: red;
+}
+
+.YT {
+    background-color:tomato;
+}
+
+.TW {
+    background-color: lightblue;
 }

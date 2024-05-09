@@ -1,0 +1,10 @@
+#ChatHeader {
+    background-color: darkgrey;
+    margin: 0;
+    text-align: center;
+}
+
+#Chat {
+    background-color:var(--secondary-color);
+    border: 2px solid black;
+}
