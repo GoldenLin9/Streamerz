@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import Channel from './Channel.js'
 import ChannelHeader from './ChannelHeader.js'
 import ChannelAdd from './ChannelAdd.js'
 
 import '../styles/channelList.css'
 
-export default function ChannelList({ id, currChannel, setCurrChannel }) {
+import { ChannelContext } from "../App"
+
+export default function ChannelList({ id }) {
 
     let [channels, setChannels] = useState([])
+
+    const { currChannel, setCurrChannel } = useContext(ChannelContext);
 
     useEffect(() => {
         getChannels()
@@ -15,6 +19,7 @@ export default function ChannelList({ id, currChannel, setCurrChannel }) {
 
     let getChannels = async () => {
         let response = await fetch("/api/channel-list")
+        console.log(response)
         let data = await response.json()
         setChannels(data)
         console.log(data)
@@ -24,8 +29,8 @@ export default function ChannelList({ id, currChannel, setCurrChannel }) {
         <div id = {id}>
             <ChannelHeader />
 
-            {channels.map((channel, indx) => (
-                <Channel key = {channel.id} channel = {channel} setCurrChannel = {setCurrChannel} channelIndx = {channel.id} />
+            {channels.map((channel) => (
+                <Channel key = {channel.id} channel = {channel} setCurrChannel = {setCurrChannel} />
             ))}
 
             <ChannelAdd setCurrChannel = {setCurrChannel} />

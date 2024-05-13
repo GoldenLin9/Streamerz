@@ -3,11 +3,14 @@ import '../styles/shared.css'
 import ChannelForm from './ChannelForm.js'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+
+import { ChannelContext } from "../App"
 
 
-export default function Channel({ channel, setCurrChannel, channelIndx }) {
+export default function Channel({ channel }) {
 
+    const { setCurrChannel } = useContext(ChannelContext);
     
     const [iconVisibility, setIconVisibility] = useState("hidden")
     const [editing, setEditing] = useState(false)
@@ -17,7 +20,7 @@ export default function Channel({ channel, setCurrChannel, channelIndx }) {
         setCurrChannel(channel)
     }
 
-    console.log("HERERERE: " + JSON.stringify(channel))
+
     let deleteChannel = async() => {
         fetch(`/api/channel/${channel.id}`, {
             method: "DELETE",

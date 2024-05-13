@@ -5,18 +5,29 @@ import Chat from './components/Chat.js'
 
 import React, { useState } from 'react' 
 
+export const ChannelContext = React.createContext();
+
 function App() {
   let [currChannel, setCurrChannel] = useState({})
 
+  const value = {
+    currChannel,
+    setCurrChannel
+  }
+
   return (
 
-    <div className="App">
+    <ChannelContext.Provider value = {value}>
 
-      <ChannelList id = "ChannelList" currChannel = {currChannel} setCurrChannel = {setCurrChannel}/>
-      <Media id = "Media" currChannel = {currChannel}/>
-      <Chat id = "Chat" />
+      <div className="App">
 
-    </div>
+        <ChannelList id = "ChannelList" currChannel = {currChannel} setCurrChannel = {setCurrChannel}/>
+        <Media id = "Media" currChannel = {currChannel}/>
+        <Chat id = "Chat" />
+
+      </div>
+
+    </ChannelContext.Provider>
 
   );
 }

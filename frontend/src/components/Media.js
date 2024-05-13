@@ -2,7 +2,12 @@
 import MediaPlayer from './MediaPlayer.js'
 import '../styles/media.css'
 
-export default function Media({ id, currChannel }) {
+import { ChannelContext } from "../App"
+import React, { useContext } from "react"
+
+export default function Media({ id }) {
+
+    const currChannel = useContext(ChannelContext)
 
     return(
         <div id = {id}>

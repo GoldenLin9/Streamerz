@@ -1,3 +1,5 @@
+import { ChannelContext } from "../App"
+import React, { useContext } from "react"
 
 function getDimensions(multiplier, units) {
     const widthRatio = 16
@@ -51,7 +53,9 @@ function Play({ platform, url }) {
 }
 
 
-export default function MediaPlayer({ currChannel }) {
+export default function MediaPlayer() {
+
+    const {currChannel} = useContext(ChannelContext)
 
     console.log(currChannel);
     return (
