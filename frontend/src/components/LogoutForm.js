@@ -1,14 +1,18 @@
 
-import React, {useState} from "react"
+import React, {useState, useContext} from "react"
 
 import {useAuth} from "../context/AuthContext"
 import { UserContext } from "./UserAuth.js"
+
+import { ChannelContext } from "../App"
 
 export default function LogoutForm() {
 	const {logout, currUser} = useAuth()
 
 	const [error, setError] = useState("")
 	const [loading, setLoading] = useState(false)
+
+	const { channels, setChannels } = useContext(ChannelContext)
 
 	const value = React.useContext(UserContext)
 
@@ -20,7 +24,11 @@ export default function LogoutForm() {
 		try {
 			setError("")
 			setLoading(true)
-			await logout();
+
+			logout()
+			.then(data => {
+				setChannels([])
+			})
 
 			value.setShowLogout(false);
 

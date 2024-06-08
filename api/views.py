@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import ChannelSerializer, AccountSerializer
-from .models import Channel
+from .models import Channel, Account
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -41,10 +41,11 @@ from django.views.decorators.csrf import csrf_exempt
 @api_view(["PUT", "GET", "POST"])
 def register(request):
     print("ENTER THE DUNGEON")
-    print(request.method)
+    print(request.data)
     
     serializer = AccountSerializer(data = request.data)
     if serializer.is_valid():
+        print(serializer)
         serializer.save()
     # print(serializer)
     # print(serializer.data)
@@ -53,15 +54,53 @@ def register(request):
     return HttpResponse(status = 201)
     
 
+@csrf_exempt
+@api_view(["POST"])
+def channel_list(request):
+    print(request.data)
+
+    uid = request.data["uid"]
+
+    channels = Channel.objects.filter(Account__uid=uid)
+    channels_data = [model_to_dict(channel) for channel in channels]
+    
+    print("returning ", channels_data)
+    return Response({"channels": channels_data}, status = 200)
+
+@csrf_exempt
+@api_view(["POST"])
+def channel_create(request):
+    data = request.data
+    print(data["uid"])
+    print(data["new_channel"])
+    print(data["new_channel"]["name"])
+
+    account = get_object_or_404(Account, uid = data["uid"])
+
+    channel = Channel.objects.create(
+        Account = account,
+        url = data["new_channel"]["url"],
+        name = data["new_channel"]["name"],
+        platform = data["new_channel"]["platform"]
+    )
+
+
+
+    return Response(model_to_dict(channel), status = 200)
 
 
 class ChannelList(APIView):
 
     def get(self, request):
-        channels = Channel.objects.all()
-        serializer = ChannelSerializer(channels, many = True)
-        print(serializer)
-        return Response(serializer.data)
+        print(request.data)
+
+        uid = request.data["uid"]
+
+        channels = Channel.objects.filter(Account__uid=uid)
+        channels_data = [model_to_dict(channel) for channel in channels]
+        
+        
+        return JsonResponse({"channels": channels_data}, status = 200)
     
     # fix me later
     def post(self, request):

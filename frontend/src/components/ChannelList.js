@@ -7,11 +7,12 @@ import '../styles/channelList.css'
 
 import { ChannelContext } from "../App"
 
+
 export default function ChannelList({ id }) {
 
-    let [channels, setChannels] = useState([])
-
+    const { channels, setChannels } = useContext(ChannelContext)
     const { currChannel, setCurrChannel } = useContext(ChannelContext);
+    
 
     useEffect(() => {
         getChannels()
@@ -24,6 +25,8 @@ export default function ChannelList({ id }) {
         setChannels(data)
         console.log(data)
     }
+
+    console.log("going to render out ", channels)
 
     return (
         <div id = {id}>

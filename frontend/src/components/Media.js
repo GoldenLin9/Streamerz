@@ -5,6 +5,7 @@ import '../styles/media.css'
 import { ChannelContext } from "../App"
 import React, { useContext } from "react"
 
+
 export default function Media({ id }) {
 
     const currChannel = useContext(ChannelContext)

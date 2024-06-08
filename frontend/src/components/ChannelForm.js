@@ -1,12 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, useContext  } from 'react'
 
+import {useAuth} from "../context/AuthContext"
+import { ChannelContext } from "../App"
 
 export default function ChannelForm({channelName, url, platform, addingChannel, channel, setCurrChannel, setEditing, setAdding}) {
     
     const [editName, setEditName] = useState(channelName);
     const [editUrl, setEditUrl] = useState(url);
     const [editPlatform, setEditPlatform] = useState(platform);
-    
+
+    const { channels, setChannels } = useContext(ChannelContext)
+
+    const { currUser } = useAuth()
+
     const platforms = ["YouTube", "Twitch"];
 
     let updateChannel = async(event) => {
@@ -38,27 +44,36 @@ export default function ChannelForm({channelName, url, platform, addingChannel, 
         event.preventDefault()
 
         let newChannel = {url: editUrl, name: editName, platform: editPlatform}
-        let response = await fetch(`/api/channel-list`, {
+        let data = {
+            "new_channel": newChannel,
+            "uid": currUser.uid
+        }
+        
+        fetch(`/api/create/channel/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             
-            body: JSON.stringify(newChannel)
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(newChannel => {
+            console.log(newChannel);
+            console.log(channels)
+            setChannels([...channels, newChannel])
         })
 
-        let response_data = await response.json()
-        let channelID = response_data.id
 
-        newChannel = {...newChannel, "id": channelID}
-        
-        setCurrChannel(newChannel)
 
         setAdding(false);
+        
     }
+
 
     return (
         <form onSubmit = {addingChannel ? createChannel: updateChannel}>
+            <h2>{`Hello ${currUser.username} your user id is ${currUser.uid}`}</h2>
             <label>Streamer Name: </label>
             <input type = "text" value = {editName} onChange = {(e) => setEditName(e.target.value)}/>
             <br></br>

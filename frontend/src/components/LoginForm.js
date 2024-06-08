@@ -1,8 +1,9 @@
 
-import React, {useState, useRef} from "react"
+import React, {useState, useRef, useContext} from "react"
 
 import {useAuth} from "../context/AuthContext"
 
+import { ChannelContext } from "../App"
 
 
 export default function LoginForm({show, setShow}) {
@@ -11,6 +12,9 @@ export default function LoginForm({show, setShow}) {
 	const passwordRef = useRef()
 
 	const {login, currUser} = useAuth()
+
+	const { channels, setChannels } = useContext(ChannelContext)
+
 
 	const [error, setError] = useState("")
 	const [loading, setLoading] = useState(false)
@@ -27,7 +31,11 @@ export default function LoginForm({show, setShow}) {
 		try {
 			setError("")
 			setLoading(true)
-			await login(email, pswd);
+
+			login(email, pswd)
+			.then(channels => {
+				setChannels(channels)
+			})
 
             // clear forms when success
 

@@ -2,7 +2,11 @@ from django.db import models
 
 # Create your models here.
 class Account(models.Model):
-    uid = models.UUIDField()
+    uid = models.CharField(max_length = 100)
+    username = models.CharField(max_length = 50)
+
+    def __str__(self):
+        return "username: " + self.username
 
 class Channel(models.Model):
     Account = models.ForeignKey(Account, on_delete = models.CASCADE)

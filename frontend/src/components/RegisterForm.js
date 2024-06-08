@@ -32,7 +32,8 @@ export default function RegisterForm({show, setShow}) {
 		try {
 			setError("")
 			setLoading(true)
-			await register(email, pswd1)
+			await register(email, pswd1, username)
+
 
 			// clear form once registered successfully
 			email.current.value = ""
