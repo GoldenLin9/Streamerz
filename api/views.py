@@ -20,22 +20,9 @@ from django.http import HttpResponse, HttpResponseNotFound
 
 from django.views.decorators.csrf import csrf_exempt
 
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
 
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
-
-        # Add custom claims
-        token['uid'] = user.uid
-        # ...
-
-        return token
-    
-class MyTokenObtainPairView(TokenObtainPairView):
-    serializer_class = MyTokenObtainPairSerializer
+from .serializers import UserSerializer
 
 # def register(request):
 #     form = UserCreationForm()
@@ -54,70 +41,43 @@ class MyTokenObtainPairView(TokenObtainPairView):
 #     return JsonResponse(model_to_dict(form, safe = False))
 
 @csrf_exempt
-@api_view(["PUT", "GET", "POST"])
-def register(request):
-    print("ENTER THE DUNGEON")
-    print(request.data)
-    
-    serializer = AccountSerializer(data = request.data)
-    if serializer.is_valid():
-        print(serializer)
-        serializer.save()
-    # print(serializer)
-    # print(serializer.data)
-    # print(serializer.data.uid)
-
-    return HttpResponse(status = 201)
-    
-
-@csrf_exempt
 @api_view(["POST"])
 def channel_list(request):
-    print(request.data)
+    # print(request.data)
 
-    uid = request.data["uid"]
+    # uid = request.data["uid"]
 
-    channels = Channel.objects.filter(Account__uid=uid)
-    channels_data = [model_to_dict(channel) for channel in channels]
+    # channels = Channel.objects.filter(Account__uid=uid)
+    # channels_data = [model_to_dict(channel) for channel in channels]
     
-    print("returning ", channels_data)
-    return Response({"channels": channels_data}, status = 200)
-
-
-@csrf_exempt
-@api_view(["POST"])
-def channel_create(request):
-    data = request.data
-    print(data["uid"])
-    print(data["new_channel"])
-    print(data["new_channel"]["name"])
-
-    account = get_object_or_404(Account, uid = data["uid"])
-
-    channel = Channel.objects.create(
-        Account = account,
-        url = data["new_channel"]["url"],
-        name = data["new_channel"]["name"],
-        platform = data["new_channel"]["platform"]
-    )
-
-
-
-    return Response(model_to_dict(channel), status = 200)
+    # print("returning ", channels_data)
+    return Response({"channels": {}}, status = 200)
 
 
 class ChannelList(APIView):
 
     def get(self, request):
-        print(request.data)
+    #     print(request.data)
 
-        uid = request.data["uid"]
+    #     uid = request.data["uid"]
 
-        channels = Channel.objects.filter(Account__uid=uid)
-        channels_data = [model_to_dict(channel) for channel in channels]
+    #     channels = Channel.objects.filter(Account__uid=uid)
+    #     channels_data = [model_to_dict(channel) for channel in channels]
         
         
-        return JsonResponse({"channels": channels_data}, status = 200)
+        return JsonResponse({"channels": {}}, status = 200)
+    
+class BlackListToken(APIView):
+
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status = HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            print(e)
+            return Response(status = HTTP_400_BAD_REQUEST)
     
     # fix me later
     def post(self, request):
@@ -138,7 +98,21 @@ class ChannelList(APIView):
         #     return Response(serializer.data, status = status.HTTP_201_CREATED)
         # return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
         return HttpResponse(status = 201)
-        
+
+class Register(APIView):
+
+    def post(self, request):
+        print("GOING TO REGISTER")
+
+        print("LOOKING AT: ", request.data)
+
+        serializer = UserSerializer(data = request.data)
+        if serializer.is_valid():
+            newUser = serializer.save()
+            if newUser:
+                return Response(status = status.HTTP_201_CREATED)
+            
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 
 class ChannelDetail(APIView):

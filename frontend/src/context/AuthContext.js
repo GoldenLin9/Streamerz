@@ -1,6 +1,7 @@
 import React, {useState, useContext, useEffect} from "react"
 import {auth} from "../firebase"
 import { ChannelContext } from "../App"
+import axiosInstance from '../axios'
 
 const AuthContext = React.createContext()
 
@@ -17,76 +18,57 @@ export function AuthProvider({ children }) {
     const { currChannel, setCurrChannel } = useContext(ChannelContext)
 
     
-    function register(email, password, username) {
-        auth.createUserWithEmailAndPassword(email, password)
-        .then((createdUser) => {
-            createdUser.user.updateProfile({
-                displayName: username
-            })
+    function register(username, password) {
 
-            const data = {
-                "uid": createdUser.user.uid,
-                "username": username
-            }
+        console.log("going to register with ", username, password)
 
-            console.log("sending ", data)
-            fetch("/api/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                
-                body: JSON.stringify(data)
-            })
-
-
+        axiosInstance.post('register/', {
+            username: username,
+            password: password
         })
     }
 
-    function login(email, password) {
+    function login(username, password) {
 
-        return auth.signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-            let user = userCredential.user
+        axiosInstance.post('token/', {
+            username: username,
+            password: password
+        }).then((response) => {
+            
+            localStorage.setItem('access_token', response.data.access)
+            localStorage.setItem('refresh_token', response.data.refresh)
+            axiosInstance.defaults.headers['Authorization'] = 'JWT ' + localStorage.getItem('access_token')
 
-            return fetch("/api/list/channels/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
 
-                body: JSON.stringify({"uid": user.uid})
-            })
-            .then(response => response.json())
-            .then(data => data.channels)
+        }).catch((error) => {
+            console.log(error)
         })
+
     }
 
     function logout() {
-        return auth.signOut();
+        
+        const response = axiosInstance.post('logout/', {
+            refresh_token: localStorage.getItem('refresh_token')
+        })
+
+        localStorage.removeItem('access_token')
+        localStorage.removeItem('refresh_token')
+        axiosInstance.defaults.headers['Authorization'] = null
     }
 
     function resetPassword(email) {
-        return auth.sendPasswordResetEmail(email);
+        return null;
     }
 
     function updateCurrUser(updates) {
-        return auth.updateProfile(currUser, updates);
+        return null;
     }
 
-
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(user => {
-            console.log("before: ", user)
-            console.log("before: ", currUser)
-            setCurrUser(user)
-            console.log("after: ", currUser)
-            setLoading(false)
-            console.log("SET USER")
-        })
+        setLoading(false)
 
-        return unsubscribe
-    }, [currUser])
+    }, [])
 
     const value = {
         currUser,

@@ -19,11 +19,11 @@ export default function ChannelList({ id }) {
     }, [currChannel])
 
     let getChannels = async () => {
-        let response = await fetch("/api/channel-list")
-        console.log(response)
-        let data = await response.json()
-        setChannels(data)
-        console.log(data)
+        // let response = await fetch("/api/channel-list")
+        // console.log(response)
+        // let data = await response.json()
+        // setChannels(data)
+        // console.log(data)
     }
 
     console.log("going to render out ", channels)

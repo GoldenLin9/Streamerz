@@ -5,12 +5,11 @@ import {useAuth} from "../context/AuthContext"
 
 export default function RegisterForm({show, setShow}) {
 	
-	const emailRef = useRef()
 	const usernameRef = useRef()
 	const passwordRef = useRef()
 	const passwordConfirmRef = useRef()
 
-	const {register, currUser} = useAuth()
+	const {register} = useAuth()
 
 	const [error, setError] = useState("")
 	const [loading, setLoading] = useState(false)
@@ -20,7 +19,7 @@ export default function RegisterForm({show, setShow}) {
 		
 		e.preventDefault()
 		
-		let email = emailRef.current.value;
+
 		let username = usernameRef.current.value;
 		let pswd1 = passwordRef.current.value;
 		let pswd2 = passwordConfirmRef.current.value;
@@ -32,11 +31,11 @@ export default function RegisterForm({show, setShow}) {
 		try {
 			setError("")
 			setLoading(true)
-			await register(email, pswd1, username)
+
+			register(username, pswd1)
 
 
 			// clear form once registered successfully
-			email.current.value = ""
 			pswd1.current.value = ""
 			pswd2.current.value = ""
 			username.current.value = ""
@@ -60,12 +59,6 @@ export default function RegisterForm({show, setShow}) {
 			{show &&
 				<form onSubmit = {handleSubmit}>
 					<strong>{error.message}</strong>
-					<p>Curr Email: {currUser && currUser.displayName}</p>
-					<div className = "email">
-						<label htmlFor = "email">Email: </label>
-						<input ref = {emailRef} type = "email" name = "email"></input>
-					</div>
-
 					<div className = "username">
 						<label htmlFor = "username">Username: </label>
 						<input ref = {usernameRef} type = "username" name = "username"></input>

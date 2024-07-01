@@ -1,19 +1,17 @@
 
-import React, {useState, useRef, useContext} from "react"
+import React, {useState, useRef} from "react"
 
 import {useAuth} from "../context/AuthContext"
-
-import { ChannelContext } from "../App"
 
 
 export default function LoginForm({show, setShow}) {
 	
-	const emailRef = useRef()
+	const usernameRef = useRef()
 	const passwordRef = useRef()
 
 	const {login, currUser} = useAuth()
 
-	const { channels, setChannels } = useContext(ChannelContext)
+	// const { channels, setChannels } = useContext(ChannelContext)
 
 
 	const [error, setError] = useState("")
@@ -24,7 +22,7 @@ export default function LoginForm({show, setShow}) {
 		
 		e.preventDefault()
 		
-		let email = emailRef.current.value;
+		let username = usernameRef.current.value;
 		let pswd = passwordRef.current.value;
 
 		
@@ -32,14 +30,11 @@ export default function LoginForm({show, setShow}) {
 			setError("")
 			setLoading(true)
 
-			login(email, pswd)
-			.then(channels => {
-				setChannels(channels)
-			})
+			login(username, pswd)
 
             // clear forms when success
 
-            emailRef.current.value = "";
+            usernameRef.current.value = "";
             passwordRef.current.value = "";
 
 			setShow(false);
@@ -79,10 +74,10 @@ export default function LoginForm({show, setShow}) {
 
 				<form onSubmit = {handleSubmit}>
 					<strong>{error}</strong>
-					<p>Curr Email: {currUser && currUser.email}</p>
-					<div className = "email">
-						<label htmlFor = "email">Email: </label>
-						<input ref = {emailRef} type = "email" name = "email"></input>
+					<p>Curr Username: ???</p>
+					<div className = "username">
+						<label htmlFor = "username">Username: </label>
+						<input ref = {usernameRef} type = "username" name = "username"></input>
 					</div>
 
 					<div className = "pswd">

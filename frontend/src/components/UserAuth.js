@@ -46,7 +46,7 @@ export default function UserAuth() {
 
             setShowLoginRegister(false);
         } else if (!currUser) {
-            setShowLogout(false);
+            setShowLogout(true);
 
             setShowLogin(false);
             setShowRegister(false);
